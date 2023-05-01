@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class OccupancyGrid{
+public class OccupancyGrid{
 
     private enum tileState{
         Unknown,
@@ -23,11 +23,19 @@ class OccupancyGrid{
     }
 
     public void setWall(Point c){
-        grid[c.x][c.y] = tileState.Wall;
+        setWall(c.x,c.y);
+    }
+
+    public void setWall(int x, int y){
+        grid[x][y] = tileState.Wall;
     }
 
     public void setFree(Point c){
-        grid[c.x][c.y] = tileState.Free;
+        setFree(c.x,c.y);
+    }
+
+    public void setFree(int x, int y){
+        grid[x][y] = tileState.Free;
     }
 
     public boolean isFree(Point c){
@@ -83,24 +91,35 @@ class OccupancyGrid{
 
     @Override
     public String toString() {
-        String output = "";
+        StringBuilder output = new StringBuilder();
+        output.append(" ");
+        for(tileState cell : grid[0]){
+            output.append("▁");
+        }
+        output.append(" \n");
         for (tileState[] row : grid){
+            output.append("▕");
             for(tileState cell : row){
                 switch (cell){
                     case Wall:
-                        output = output.concat("#");
+                        output.append("█");
                         break;
                     case Free:
-                        output = output.concat(" ");
+                        output.append(" ");
                         break;
                     case Unknown:
-                        output = output.concat("~");
+                        output.append("░");
                         break;
                 }
             }
-            output = output.concat("\n");
+            output.append("▏\n");
         }
-        return output;
+        output.append(" ");
+        for(tileState cell : grid[0]){
+            output.append("▔");
+        }
+        output.append(" ");
+        return output.toString();
     }
 
 }
