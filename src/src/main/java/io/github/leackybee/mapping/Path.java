@@ -6,12 +6,12 @@ public class Path {
 
     private int current;
 
-    private List<Point> pathPoints = new ArrayList();
+    private final List<Point> pathPoints = new ArrayList();
 
-    private Point start;
-    private Point goal;
-    private OccupancyGrid grid;
-    private int stepSize;
+    private final Point start;
+    private final Point goal;
+    private final OccupancyGrid grid;
+    private final int stepSize;
 
     private boolean valid = false;
 
