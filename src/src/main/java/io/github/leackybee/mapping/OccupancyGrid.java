@@ -81,4 +81,26 @@ class OccupancyGrid{
         return output;
     }
 
+    @Override
+    public String toString() {
+        String output = "";
+        for (tileState[] row : grid){
+            for(tileState cell : row){
+                switch (cell){
+                    case Wall:
+                        output = output.concat("#");
+                        break;
+                    case Free:
+                        output = output.concat(" ");
+                        break;
+                    case Unknown:
+                        output = output.concat("~");
+                        break;
+                }
+            }
+            output = output.concat("\n");
+        }
+        return output;
+    }
+
 }
