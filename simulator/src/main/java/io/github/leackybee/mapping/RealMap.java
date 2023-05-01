@@ -28,12 +28,12 @@ public class RealMap {
             BufferedImage png = ImageIO.read(new File(Constants.MAP_DIRECTORY.concat(Constants.MAP)));
             Constants.MAP_HEIGHT = png.getHeight();
             Constants.MAP_WIDTH = png.getWidth();
-            map = new TileState[Constants.MAP_WIDTH][Constants.MAP_HEIGHT];
+            map = new TileState[Constants.MAP_HEIGHT][Constants.MAP_WIDTH];
 
-
-            for(int x = 0; x < png.getWidth(); x++){
-                for(int y = 0; y < png.getHeight(); y++){
-                    System.out.println(png.getRGB(x,y));
+            for(int y = 0; y < png.getWidth(); y++){
+                for(int x = 0; x < png.getHeight(); x++){
+                    // x and y are this way around because we are storing our map in
+                    // row-major fashion, while the image is column-major
                     if(png.getRGB(y,x) == BLACK){
                         map[x][y] = TileState.Wall;
                     } else{
@@ -62,16 +62,13 @@ public class RealMap {
             output.append("▁");
         }
         output.append(" \n");
+
         for (TileState[] row : map){
             output.append("▕");
             for(TileState cell : row){
-                switch (cell){
-                    case Wall:
-                        output.append("█");
-                        break;
-                    case Free:
-                        output.append(" ");
-                        break;
+                switch (cell) {
+                    case Wall -> output.append("█");
+                    case Free -> output.append(" ");
                 }
             }
             output.append("▏\n");
