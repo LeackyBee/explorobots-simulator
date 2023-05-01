@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.leackybee</groupId>
-    <artifactId>src</artifactId>
+    <artifactId>simulator</artifactId>
     <version>1.0-SNAPSHOT</version>
     <build>
         <plugins>
