@@ -27,7 +27,9 @@ public class OccupancyGrid{
     }
 
     public void setWall(int x, int y){
-        grid[x][y] = tileState.Wall;
+        if(isInBounds(x,y)){
+            grid[x][y] = tileState.Wall;
+        }
     }
 
     public void setFree(Point c){
@@ -35,7 +37,9 @@ public class OccupancyGrid{
     }
 
     public void setFree(int x, int y){
-        grid[x][y] = tileState.Free;
+        if(isInBounds(x,y)){
+            grid[x][y] = tileState.Free;
+        }
     }
 
     public boolean isFree(Point c){
@@ -43,15 +47,23 @@ public class OccupancyGrid{
     }
 
     public boolean isFree(int x, int y){
-        return grid[x][y] == tileState.Free;
+        if(isInBounds(x,y)){
+            return grid[x][y] == tileState.Free;
+        } else {
+            return false;
+        }
     }
 
     public boolean isWall(Point c){
-        return grid[c.x][c.y] == tileState.Wall;
+        return isWall(c.x,c.y);
     }
 
     public boolean isWall(int x, int y){
-        return grid[x][y] == tileState.Wall;
+        if(isInBounds(x,y)){
+            return grid[x][y] == tileState.Wall;
+        } else {
+            return true;
+        }
     }
 
     public boolean isUnknown(Point c){
@@ -67,7 +79,7 @@ public class OccupancyGrid{
     }
 
     public boolean isInBounds(int x, int y){
-        return x > grid.length || x < 0 || y > grid[0].length || y < 0;
+        return !(x > grid.length || x < 0 || y > grid[0].length || y < 0);
     }
 
 
@@ -120,6 +132,62 @@ public class OccupancyGrid{
         }
         output.append(" ");
         return output.toString();
+    }
+
+    // Bresenham's Line Algorithm
+    public List<Point> getLinePoints(int x0, int y0, int xn, int yn){
+        List<Point> output = new ArrayList<>();
+        int dx = Math.abs(xn-x0);
+        int dy = Math.abs(yn-y0);
+        int sx = x0 < xn ? 1 : -1;
+        int sy = y0 < yn ? 1 : -1;
+        int err = dx - dy;
+
+        while(x0 != xn || y0 != yn){
+            output.add(new Point(x0,y0));
+            int e2 = 2*err;
+            if(e2 > -dy){
+                err -= dy;
+                x0 += sx;
+            }
+
+            if(e2 < dx){
+                err += dx;
+                y0 += sy;
+            }
+
+        }
+
+        return output;
+    }
+
+    // Bresenham's Circle Algorithm
+    public List<Point> getCirclePoints(int radius, int x0, int y0){
+        List<Point> output = new ArrayList<>();
+
+        int d = 3-2*radius;
+        int x = 0;
+        int y = radius;
+
+        while(x <= y){
+            output.add(new Point(x0+x, y0+y));
+            output.add(new Point(x0+y, y0+x));
+            output.add(new Point(x0-x, y0+y));
+            output.add(new Point(x0-y, y0+x));
+            output.add(new Point(x0-x, y0-y));
+            output.add(new Point(x0-y, y0-x));
+            output.add(new Point(x0+x, y0-y));
+            output.add(new Point(x0+y, y0-x));
+
+            if(d<0){
+                d = d + 4*x + 6;
+            } else{
+                d = d + 4*(x-y) + 10;
+                y--;
+            }
+            x++;
+        }
+        return output;
     }
 
 }
