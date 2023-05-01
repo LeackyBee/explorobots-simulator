@@ -93,7 +93,7 @@ public class OccupancyGrid{
     public String toString() {
         StringBuilder output = new StringBuilder();
         output.append(" ");
-        for(tileState cell : grid[0]){
+        for(tileState ignored : grid[0]){
             output.append("▁");
         }
         output.append(" \n");
@@ -115,7 +115,7 @@ public class OccupancyGrid{
             output.append("▏\n");
         }
         output.append(" ");
-        for(tileState cell : grid[0]){
+        for(tileState ignored : grid[0]){
             output.append("▔");
         }
         output.append(" ");
