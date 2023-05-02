@@ -51,7 +51,18 @@ public class RealMap {
     }
 
     public TileState checkTile(int x, int y){
-        return map[x][y];
+        if (isInBounds(x, y)) {
+            return map[y][x];
+        }
+        return TileState.Wall;
+    }
+
+    public boolean isInBounds(Point c){
+        return isInBounds(c.x,c.y);
+    }
+
+    public boolean isInBounds(int x, int y){
+        return !(x >= map.length || x < 0 || y >= map[0].length || y < 0);
     }
 
     @Override
