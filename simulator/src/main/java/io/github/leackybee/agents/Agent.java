@@ -71,7 +71,7 @@ public class Agent {
     public void shadowCastVision(RealMap map) {
         occGrid.setWall(x,y);
 
-        for(int i = 1; i < 2; i++){
+        for(int i = 0; i < 4; i++){
             Quadrant q = new Quadrant(new Point(x,y), i);
 
             Row first = new Row(1,new Slope(-1,1),new Slope(1,1));
@@ -110,7 +110,7 @@ public class Agent {
     }
 
     private Slope slope(Tile tile){
-        return new Slope(2 * tile.col - 1, 2*tile.row);
+        return new Slope(2 * (tile.col - 1), 2*tile.row);
     }
 
     private boolean isSymmetric(Row row, Tile tile){
@@ -140,13 +140,29 @@ public class Agent {
         return map.checkTile(q.transform(t)) == RealMap.TileState.Wall;
     }
 
+    private boolean inRange(Tile t){
+        return Math.hypot(t.col, t.row) <= visualRange;
+    }
+
+    private boolean inCone(Quadrant q, Tile t){
+        Point p = q.transform(t);
+        double hx = Math.sin(heading);
+        double hy = -Math.cos(heading);
+
+        return Math.acos(((p.x-x)*hx + (p.y-y)*hy)/Math.hypot((p.x-x),(p.y-y))) < visionCone/2;
+    }
+
     private void scan(RealMap map, Row r, Quadrant q){
         Tile prev = null;
         for(Tile t : r.tiles()){
+            if(!inRange(t) || !inCone(q,t)){
+                continue;
+            }
             if(Constants.VISION_DEBUG){
                 occGrid.setFocus(q.transform(t));
                 System.out.println(occGrid);
             }
+
             if(is_Wall(map, q, t) || isSymmetric(r,t)){
                 reveal(map, q, t);
             }
@@ -161,8 +177,7 @@ public class Agent {
             }
             prev = t;
         }
-        if(is_Floor(map, q, prev)){
-            System.out.println("new row");
+        if(r.depth <= visualRange && is_Floor(map, q, prev)){
             scan(map, r.next(), q);
         }
 
