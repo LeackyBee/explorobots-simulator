@@ -43,7 +43,7 @@ public class ShadowCast extends VisionHandler{
     }
 
     private Slope slope(Tile tile){
-        return new Slope(2 * (tile.col - 1), 2*tile.row);
+        return new Slope(2 * (tile.col-1), 2*tile.row);
     }
 
     private boolean isSymmetric(Row row, Tile tile){
@@ -103,7 +103,6 @@ public class ShadowCast extends VisionHandler{
                 r.sSlope = slope(t);
             }
             if(is_Floor(q, prev) && is_Wall(q, t)){
-                System.out.println("Split");
                 Row next = r.next();
                 next.eSlope = slope(t);
                 scanRow(next, q);
