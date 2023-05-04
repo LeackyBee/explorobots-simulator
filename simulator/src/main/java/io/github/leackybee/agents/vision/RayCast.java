@@ -16,7 +16,8 @@ public class RayCast extends VisionHandler{
     public void scan(OccupancyGrid occGrid, RealMap map, Point position, double heading) {
         // We send 2 rays for every pixel on the outer perimeter of the visual cone
         // One to the center of the pixel, and one to the edge.
-        int divisions = (int) (0.1*Math.PI * (FoV/2*Math.PI)*2*visualRange);
+        int divisions = (int) (0.15*Math.PI * (FoV/2*Math.PI)*2*visualRange);
+        System.out.println(divisions);
 
         for(double h = heading - FoV/2; h <= heading + FoV/2; h += FoV/(divisions-1)){
             double tx = Math.sin(h)*visualRange;
@@ -24,6 +25,9 @@ public class RayCast extends VisionHandler{
 
             List<Point> ray = occGrid.getLinePoints((int) position.x, (int)position.y, (int) Math.round(tx), (int) Math.round(ty));
             for(Point point : ray){
+                if(Math.hypot(point.x - position.x, point.y - position.y) > visualRange){
+                    break;
+                }
                 occGrid.setFocus(point);
                 if(map.checkTile(point) == RealMap.TileState.Wall){
                     occGrid.setWall(point);
@@ -32,8 +36,6 @@ public class RayCast extends VisionHandler{
                     occGrid.setFree(point);
                 }
             }
-            //System.out.println(occGrid);
-
         }
     }
 }
