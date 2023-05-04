@@ -14,8 +14,12 @@ public final class Constants {
     public static String MAP_DIRECTORY = "simulator/src/main/maps/";
     public static String MAP = "leaves.png";
     public static boolean THICK_LINES = true;
+
+    // Debug constants
     public static boolean VISION_DEBUG = false;
-    public static VISION AGENT_VISION_TYPE = VISION.RAY;
     public static boolean PATH_DEBUG = false;
+
+    public static VISION AGENT_VISION_TYPE = VISION.SHADOW;
+    public static int NUM_AGENTS = 3;
 
 }
