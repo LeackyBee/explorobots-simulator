@@ -23,7 +23,7 @@ public class RayCast extends VisionHandler{
             double tx = Math.sin(h)*visualRange;
             double ty = -Math.cos(h)*visualRange;
 
-            List<Point> ray = occGrid.getLinePoints((int) position.x, (int)position.y, (int) Math.round(tx), (int) Math.round(ty));
+            List<Point> ray = occGrid.getLinePoints(position.x, position.y, (int) Math.round(tx), (int) Math.round(ty));
             for(Point point : ray){
                 if(Math.hypot(point.x - position.x, point.y - position.y) > visualRange){
                     break;
