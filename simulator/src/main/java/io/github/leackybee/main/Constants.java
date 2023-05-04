@@ -15,6 +15,7 @@ public final class Constants {
     public static String MAP = "leaves.png";
     public static boolean THICK_LINES = true;
     public static boolean VISION_DEBUG = false;
-    public static VISION AGENT_VISION_TYPE = VISION.SHADOW;
+    public static VISION AGENT_VISION_TYPE = VISION.RAY;
+    public static boolean PATH_DEBUG = false;
 
 }

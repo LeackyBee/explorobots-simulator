@@ -1,5 +1,7 @@
 package io.github.leackybee.mapping;
 
+import io.github.leackybee.main.Constants;
+
 import java.util.*;
 
 public class Path {
@@ -38,9 +40,17 @@ public class Path {
                 .thenComparingDouble(a ->  Math.hypot(((Point) a).x, ((Point) a).y)));
 
         frontier.add(start);
-
+        if(Constants.PATH_DEBUG){
+            grid.setFocus(goal.x,goal.y);
+            System.out.println(grid);
+        }
         while(!frontier.isEmpty()){
+
             Point c = frontier.poll();
+            if(Constants.PATH_DEBUG){
+                grid.setFocus(c.x,c.y);
+                System.out.println(grid);
+            }
 
             if(c == goal){
                 while(traceback.get(c) != start){
@@ -56,7 +66,7 @@ public class Path {
             for(Point n : neighbours){
                 double tempGScore = g_scores.get(c) + Math.hypot(n.x - c.x, n.y - c.y);
 
-                if(tempGScore < g_scores.get(n)){
+                if(tempGScore < g_scores.getOrDefault(n, Double.POSITIVE_INFINITY)){
                     traceback.put(n,c);
                     g_scores.put(n, tempGScore);
                     f_scores.put(n, tempGScore + h(n));
