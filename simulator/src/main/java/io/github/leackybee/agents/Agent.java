@@ -6,29 +6,47 @@ import io.github.leackybee.agents.vision.ShadowCast;
 import io.github.leackybee.agents.vision.VisionHandler;
 import io.github.leackybee.main.Constants;
 import io.github.leackybee.mapping.OccupancyGrid;
+import io.github.leackybee.mapping.Path;
 import io.github.leackybee.mapping.Point;
 import io.github.leackybee.mapping.RealMap;
 
 public class Agent {
 
+    private Path path;
     private int x;
     private int y;
     private double heading;
     private final OccupancyGrid occGrid;
     private final VisionHandler vision;
+    public final int commRange;
 
-    public Agent(int x, int y, double heading, int visualRange, double visionCone){
+    public Agent(int x, int y, double heading, int visualRange, double fov, int commRange){
         this.x = x;
         this.y = y;
         this.heading = heading;
+        this.commRange = commRange;
         occGrid = new OccupancyGrid();
 
         switch (Constants.AGENT_VISION_TYPE){
-            case RAY-> vision = new RayCast(visualRange, visionCone);
-            case SHADOW -> vision = new ShadowCast(visualRange, visionCone);
-            case INVERSE_RAY -> vision = new InverseRayCast(visualRange,visionCone);
+            case RAY-> vision = new RayCast(visualRange, fov);
+            case SHADOW -> vision = new ShadowCast(visualRange, fov);
+            case INVERSE_RAY -> vision = new InverseRayCast(visualRange,fov);
             default -> throw new RuntimeException("Invalid Vision Handler : " + Constants.AGENT_VISION_TYPE);
         }
+    }
+
+    public void setPath(Path p){
+        this.path = p;
+    }
+
+    public void takeNextStep(){
+        if(path != null) {
+            move(path.getNextPoint());
+        }
+    }
+
+    public void move(Point p){
+        move(p.x,p.y);
     }
 
     public void move(int x, int y){
@@ -43,6 +61,8 @@ public class Agent {
 
     public void vision(RealMap map){
         vision.scan(occGrid, map, new Point(x,y), heading);
+        occGrid.setFocus(x,y);
+        System.out.println(occGrid);
     }
 
 }
