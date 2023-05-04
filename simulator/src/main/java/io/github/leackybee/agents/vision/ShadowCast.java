@@ -42,8 +42,12 @@ public class ShadowCast extends VisionHandler{
         System.out.println(occGrid);
     }
 
-    private Slope slope(Tile tile){
+    private Slope slopeLeft(Tile tile){
         return new Slope(2 * (tile.col-1), 2*tile.row);
+    }
+
+    private Slope slopeRight(Tile tile){
+        return new Slope(2 * (tile.col), 2*tile.row);
     }
 
     private boolean isSymmetric(Row row, Tile tile){
@@ -100,11 +104,11 @@ public class ShadowCast extends VisionHandler{
                 reveal(q, t);
             }
             if(is_Wall(q, prev) && is_Floor(q, t)){
-                r.sSlope = slope(t);
+                r.sSlope = slopeLeft(t);
             }
             if(is_Floor(q, prev) && is_Wall(q, t)){
                 Row next = r.next();
-                next.eSlope = slope(t);
+                next.eSlope = slopeRight(t);
                 scanRow(next, q);
             }
             prev = t;
