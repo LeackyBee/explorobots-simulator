@@ -30,14 +30,14 @@ public class RealMap {
             Constants.MAP_WIDTH = png.getWidth();
             map = new TileState[Constants.MAP_HEIGHT][Constants.MAP_WIDTH];
 
-            for(int y = 0; y < png.getWidth(); y++){
-                for(int x = 0; x < png.getHeight(); x++){
+            for(int y = 0; y < png.getHeight(); y++){
+                for(int x = 0; x < png.getWidth(); x++){
                     // x and y are this way around because we are storing our map in
                     // row-major fashion, while the image is column-major
-                    if(png.getRGB(y,x) == BLACK){
-                        map[x][y] = TileState.Wall;
+                    if(png.getRGB(x,y) == BLACK){
+                        map[y][x] = TileState.Wall;
                     } else{
-                        map[x][y] = TileState.Free;
+                        map[y][x] = TileState.Free;
                     }
                 }
             }
@@ -62,7 +62,7 @@ public class RealMap {
     }
 
     public boolean isInBounds(int x, int y){
-        return !(x >= map.length || x < 0 || y >= map[0].length || y < 0);
+        return !(x >= map[0].length || x < 0 || y >= map.length || y < 0);
     }
 
     @Override

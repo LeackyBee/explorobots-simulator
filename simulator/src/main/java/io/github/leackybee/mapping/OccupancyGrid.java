@@ -59,7 +59,7 @@ public class OccupancyGrid{
 
     public boolean isFree(int x, int y){
         if(isInBounds(x,y)){
-            return grid[x][y] == tileState.Free;
+            return grid[y][x] == tileState.Free;
         } else {
             return false;
         }
@@ -71,7 +71,7 @@ public class OccupancyGrid{
 
     public boolean isWall(int x, int y){
         if(isInBounds(x,y)){
-            return grid[x][y] == tileState.Wall;
+            return grid[y][x] == tileState.Wall;
         } else {
             return true;
         }
@@ -82,7 +82,7 @@ public class OccupancyGrid{
     }
 
     public boolean isUnknown(int x, int y){
-        return grid[x][y] == tileState.Unknown;
+        return grid[y][x] == tileState.Unknown;
     }
 
     public boolean isInBounds(Point c){
@@ -90,7 +90,7 @@ public class OccupancyGrid{
     }
 
     public boolean isInBounds(int x, int y){
-        return !(x >= grid.length || x < 0 || y >= grid[0].length || y < 0);
+        return !(x >= grid[0].length || x < 0 || y >= grid.length || y < 0);
     }
 
 
@@ -204,6 +204,13 @@ public class OccupancyGrid{
             }
         }
 
+        if(!isInBounds(output.get(0))){
+            for(int i = 0; i < output.size() /2; i++){
+                Point t = output.get(i);
+                output.set(i, output.get(output.size()-1-i));
+                output.set(output.size()-1-i, t);
+            }
+        }
         return output;
     }
 
