@@ -18,7 +18,7 @@ public class Agent {
     private double heading;
     private final OccupancyGrid occGrid;
     private final VisionHandler vision;
-    public final int commRange;
+    private final int commRange;
 
     public Agent(int x, int y, double heading, int visualRange, double fov, int commRange){
         this.x = x;
@@ -49,6 +49,7 @@ public class Agent {
     public int getY(){
         return this.y;
     }
+    public int getCommRange(){return this.commRange;}
 
     public void takeNextStep(){
         move(x+20, y);

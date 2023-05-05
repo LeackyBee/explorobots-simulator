@@ -295,4 +295,17 @@ public class OccupancyGrid{
         output.append(" ");
         return output.toString();
     }
+
+    public void merge(OccupancyGrid other){
+        for(int x = 0; x < Constants.MAP_WIDTH; x++){
+            for(int y = 0; y < Constants.MAP_HEIGHT; y++){
+                if(isUnknown(x,y)){
+                    switch (other.checkTile(x,y)){
+                        case Free -> setFree(x, y);
+                        case Wall -> setWall(x, y);
+                    }
+                }
+            }
+        }
+    }
 }

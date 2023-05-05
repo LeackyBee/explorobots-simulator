@@ -33,6 +33,7 @@ public class SimulationCycle {
             timestep++;
             updateCanvas();
             vision();
+            communicate();
             moveAgents();
         }
     }
@@ -49,8 +50,23 @@ public class SimulationCycle {
         }
     }
 
+    private void communicate(){
+        for(Agent a : agents){
+            for(Agent b : agents){
+                if (!a.equals(b)) {
+                    // We can only communicate map information if both agents are in range of eachother
+                    int commRange = Math.min(a.getCommRange(), b.getCommRange());
+
+                    if(Math.hypot(a.getX()-b.getX(),a.getY()-b.getY())<=commRange){
+                        a.getOccGrid().merge(b.getOccGrid());
+                        b.getOccGrid().merge(a.getOccGrid());
+                    }
+                }
+            }
+        }
+    }
+
     private void updateCanvas(){
-        System.out.println("Updating canvas");
         BufferedImage image = new BufferedImage(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = image.createGraphics();
 
