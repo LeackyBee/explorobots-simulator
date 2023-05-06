@@ -88,11 +88,11 @@ public class SimulationCycle {
                     switch(occ.checkTile(x,y)){
                         case Wall -> {
                             g2d.setColor(Color.BLACK);
-                            g2d.drawRect(x,y,1,1);
+                            g2d.drawRect(x,y,0,0);
                         }
                         case Free -> {
                             g2d.setColor(Color.WHITE);
-                            g2d.drawRect(x,y,1,1);
+                            g2d.drawRect(x,y,0,0);
                         }
                     }
                 }
