@@ -11,8 +11,8 @@ import java.util.List;
 public class NFD implements FrontierDetection{
 
     @Override
-    public List<Frontier> findFrontiers(OccupancyGrid map) {
-        List<Frontier> output = new ArrayList<>();
+    public List<Frontier> findFrontiers(Point o, OccupancyGrid map) {
+        List<Frontier> frontiers = new ArrayList<>();
         List<Point> closed = new ArrayList<>();
 
         for(int x = 0; x < Constants.MAP_WIDTH; x++){
@@ -31,7 +31,9 @@ public class NFD implements FrontierDetection{
                         }
 
                         if(candidate){
-                            output.add(new Frontier(stretchFrontier(map,p)));
+                            Frontier f = stretchFrontier(map, p);
+                            frontiers.add(f);
+                            closed.addAll(f.getPoints());
                         }
 
                     }
@@ -39,27 +41,25 @@ public class NFD implements FrontierDetection{
                 closed.add(p);
             }
         }
-        return output;
+        return frontiers;
     }
 
-    private List<Point> stretchFrontier(OccupancyGrid map, Point p){
+    private Frontier stretchFrontier(OccupancyGrid map, Point p){
         List<Point> frontier = new ArrayList<>();
         List<Point> open = new ArrayList<>();
         open.add(p);
 
         while(!open.isEmpty()){
             Point c = open.remove(0);
-            if(!frontier.contains(c) || !map.isWall(c)){
+            if(!frontier.contains(c) && map.isFree(c)){
                 frontier.add(c);
 
                 List<Point> frontierNeighbours = new ArrayList<>();
-                for(Point n : map.getAllNeighbours(p)){
-                    if(!frontier.contains(n)){
-                        for(Point nn : map.getAllNeighbours(n)){
-                            if(map.isUnknown(nn)){
-                                frontierNeighbours.add(n);
-                                break;
-                            }
+                for(Point n : map.getAllNeighbours(c)){
+                    for(Point nn : map.getAllNeighbours(n)){
+                        if(map.isUnknown(nn)){
+                            frontierNeighbours.add(n);
+                            break;
                         }
                     }
                 }
@@ -71,6 +71,6 @@ public class NFD implements FrontierDetection{
                 }
             }
         }
-        return frontier;
+        return new Frontier(frontier);
     }
 }
