@@ -23,7 +23,7 @@ public class NFD implements FrontierDetection{
 
                         boolean candidate = false;
 
-                        for(Point n : map.getAllNeighbours(p)){
+                        for(Point n : map.getAllNeighbours(p,false)){
                             if(map.isUnknown(n)){
                                 candidate = true;
                                 break;
@@ -55,8 +55,8 @@ public class NFD implements FrontierDetection{
                 frontier.add(c);
 
                 List<Point> frontierNeighbours = new ArrayList<>();
-                for(Point n : map.getAllNeighbours(c)){
-                    for(Point nn : map.getAllNeighbours(n)){
+                for(Point n : map.getAllNeighbours(c,true)){
+                    for(Point nn : map.getAllNeighbours(n,false)){
                         if(map.isUnknown(nn)){
                             frontierNeighbours.add(n);
                             break;
