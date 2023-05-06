@@ -2,7 +2,6 @@ package io.github.leackybee.exploration.frontier;
 
 import io.github.leackybee.mapping.Point;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Frontier {

@@ -1,11 +1,8 @@
 package io.github.leackybee.mapping;
 
-import com.vaadin.flow.component.map.configuration.geometry.SimpleGeometry;
 import io.github.leackybee.exploration.frontier.Frontier;
 import io.github.leackybee.exploration.frontier.FrontierDetection;
 import io.github.leackybee.exploration.frontier.NFD;
-import io.github.leackybee.exploration.frontier.WFD;
-import io.github.leackybee.exploration.frontier.WFD_IP;
 import io.github.leackybee.simulator.Constants;
 
 import java.util.ArrayList;
@@ -32,9 +29,7 @@ public class OccupancyGrid{
         }
 
         switch (Constants.FRONTIER_DETECTION_ALGORITHM){
-            case NAIVE -> {
-                frontierDetector = new NFD();
-            }
+            case NAIVE -> frontierDetector = new NFD();
         }
     }
 
@@ -121,15 +116,11 @@ public class OccupancyGrid{
 
     public List<Point> getValidNeighbours(Point c, int radius){
         List<Point> output = new ArrayList<>();
-        for(int i = c.x - radius; i <= c.x + radius; i++){
-            for(int j = c.y - radius; j <= c.y + radius; j++){
-                if(i == c.x && j == c.y){
-                    continue;
-                } else if(Math.hypot(c.y-j, c.x-i) > radius){
-                    continue;
-                } else{
-                    if(!isWall(i,j) || !isInBounds(i,j) || !isUnknown(i,j)){
-                        output.add(new Point(i,j));
+        for(int x = c.x - radius; x <= c.x + radius; x++){
+            for(int y = c.y - radius; y <= c.y + radius; y++){
+                if((x != c.x && y != c.y) && Math.hypot(c.y-y, c.x-x) <= radius){
+                    if(!isWall(x,y) || !isInBounds(x,y) || !isUnknown(x,y)){
+                        output.add(new Point(x,y));
                     }
                 }
             }
@@ -331,19 +322,11 @@ public class OccupancyGrid{
         for (occTileState[] row : grid){
             output.append("▕");
             for(occTileState cell : row){
-                switch (cell){
-                    case Wall:
-                        output.append("█");
-                        break;
-                    case Free:
-                        output.append(" ");
-                        break;
-                    case Unknown:
-                        output.append("░");
-                        break;
-                    case Focus:
-                        output.append("F");
-                        break;
+                switch (cell) {
+                    case Wall -> output.append("█");
+                    case Free -> output.append(" ");
+                    case Unknown -> output.append("░");
+                    case Focus -> output.append("F");
                 }
             }
             output.append("▏\n");
