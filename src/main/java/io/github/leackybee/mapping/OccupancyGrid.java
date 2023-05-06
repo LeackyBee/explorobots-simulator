@@ -3,6 +3,7 @@ package io.github.leackybee.mapping;
 import io.github.leackybee.exploration.frontier.Frontier;
 import io.github.leackybee.exploration.frontier.FrontierDetection;
 import io.github.leackybee.exploration.frontier.NFD;
+import io.github.leackybee.exploration.frontier.WFD;
 import io.github.leackybee.simulator.Constants;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class OccupancyGrid{
 
         switch (Constants.FRONTIER_DETECTION_ALGORITHM){
             case NAIVE -> frontierDetector = new NFD();
+            case WFD -> frontierDetector = new WFD();
         }
     }
 
@@ -128,18 +130,25 @@ public class OccupancyGrid{
         return output;
     }
 
-    public List<Point> getAllNeighbours(Point c){
-        return List.of(
+    public List<Point> getAllNeighbours(Point c, boolean corners){
+        List<Point> output = new ArrayList<>(List.of(
                 new Point(c.x+1,c.y),
                 new Point(c.x-1,c.y),
                 new Point(c.x,c.y+1),
-                new Point(c.x,c.y-1),
+                new Point(c.x,c.y-1)
+        ));
 
-                new Point(c.x+1,c.y+1),
-                new Point(c.x-1,c.y+1),
-                new Point(c.x+1,c.y-1),
-                new Point(c.x-1,c.y-1)
-        );
+        if(corners){
+            output.addAll(List.of(
+                    new Point(c.x+1,c.y+1),
+                    new Point(c.x-1,c.y+1),
+                    new Point(c.x+1,c.y-1),
+                    new Point(c.x-1,c.y-1)
+            ));
+        }
+
+
+        return output;
     }
 
 
@@ -303,12 +312,10 @@ public class OccupancyGrid{
     /**
      * Update the list of frontiers and return it
      */
-    public List<Frontier> findFrontiers(){
-        frontiers = frontierDetector.findFrontiers(this);
+    public List<Frontier> findFrontiers(Point o){
+        frontiers = frontierDetector.findFrontiers(o, this);
         return frontiers;
     }
-
-
 
 
     @Override
