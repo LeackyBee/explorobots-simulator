@@ -7,15 +7,14 @@ import java.util.*;
 public class Path {
 
     private int current;
-
     private final List<Point> pathPoints = new ArrayList<>();
-
     private final Point start;
     private final Point goal;
     private final OccupancyGrid grid;
     private final int stepSize;
 
     private boolean valid = false;
+    private boolean finished = false;
 
     public Path(Point start, Point goal, OccupancyGrid grid, int stepSize){
         this.start = start;
@@ -25,6 +24,8 @@ public class Path {
 
         plan();
     }
+
+    public boolean isFinished(){return finished;}
 
     private void plan(){
         Map<Point, Double> f_scores = new HashMap<>();
@@ -42,7 +43,6 @@ public class Path {
         frontier.add(start);
         if(Constants.PATH_DEBUG){
             grid.setFocus(goal.x,goal.y);
-            System.out.println(grid);
         }
         while(!frontier.isEmpty()){
 
@@ -52,9 +52,10 @@ public class Path {
                 System.out.println(grid);
             }
 
-            if(c == goal){
+            if(c.equals(goal)){
                 while(traceback.get(c) != start){
                     pathPoints.add(0, c);
+                    c = traceback.get(c);
                 }
                 pathPoints.add(0,start);
                 valid = true;
@@ -62,6 +63,7 @@ public class Path {
             }
 
             List<Point> neighbours = grid.getValidNeighbours(c, stepSize);
+            //System.out.println(neighbours);
 
             for(Point n : neighbours){
                 double tempGScore = g_scores.get(c) + Math.hypot(n.x - c.x, n.y - c.y);
@@ -87,6 +89,7 @@ public class Path {
             return null;
         }
         if(current >= pathPoints.size()){
+            finished = true;
             return goal;
         }
 
