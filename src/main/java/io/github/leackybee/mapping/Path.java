@@ -93,7 +93,7 @@ public class Path {
             return goal;
         }
 
-        return pathPoints.get(++current);
+        return pathPoints.get(current++);
 
     }
 
