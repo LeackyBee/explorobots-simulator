@@ -1,5 +1,11 @@
 package io.github.leackybee.mapping;
 
+import com.vaadin.flow.component.map.configuration.geometry.SimpleGeometry;
+import io.github.leackybee.exploration.frontier.Frontier;
+import io.github.leackybee.exploration.frontier.FrontierDetection;
+import io.github.leackybee.exploration.frontier.NFD;
+import io.github.leackybee.exploration.frontier.WFD;
+import io.github.leackybee.exploration.frontier.WFD_IP;
 import io.github.leackybee.simulator.Constants;
 
 import java.util.ArrayList;
@@ -15,13 +21,8 @@ public class OccupancyGrid{
         Focus,
     }
 
-    public occTileState checkTile(int x, int y){
-        if (isInBounds(x, y)) {
-            return grid[y][x];
-        }
-        return occTileState.Wall;
-    }
-
+    private List<Frontier> frontiers;
+    private FrontierDetection frontierDetector;
     private final occTileState[][] grid;
 
     public OccupancyGrid(){
@@ -29,6 +30,23 @@ public class OccupancyGrid{
         for (occTileState[] tileStates : grid) {
             Arrays.fill(tileStates, occTileState.Unknown);
         }
+
+        switch (Constants.FRONTIER_DETECTION_ALGORITHM){
+            case NAIVE -> {
+                frontierDetector = new NFD();
+            }
+        }
+    }
+
+    public occTileState checkTile(Point p){
+        return checkTile(p.x,p.y);
+    }
+
+    public occTileState checkTile(int x, int y){
+        if (isInBounds(x, y)) {
+            return grid[y][x];
+        }
+        return occTileState.Wall;
     }
 
     public void setWall(Point c){
@@ -101,7 +119,6 @@ public class OccupancyGrid{
         return !(x >= grid[0].length || x < 0 || y >= grid.length || y < 0);
     }
 
-
     public List<Point> getValidNeighbours(Point c, int radius){
         List<Point> output = new ArrayList<>();
         for(int i = c.x - radius; i <= c.x + radius; i++){
@@ -120,6 +137,19 @@ public class OccupancyGrid{
         return output;
     }
 
+    public List<Point> getAllNeighbours(Point c){
+        return List.of(
+                new Point(c.x+1,c.y),
+                new Point(c.x-1,c.y),
+                new Point(c.x,c.y+1),
+                new Point(c.x,c.y-1),
+
+                new Point(c.x+1,c.y+1),
+                new Point(c.x-1,c.y+1),
+                new Point(c.x+1,c.y-1),
+                new Point(c.x-1,c.y-1)
+        );
+    }
 
 
     // Bresenham's Line Algorithm
@@ -259,6 +289,36 @@ public class OccupancyGrid{
         return output;
     }
 
+    public void merge(OccupancyGrid other){
+        for(int x = 0; x < Constants.MAP_WIDTH; x++){
+            for(int y = 0; y < Constants.MAP_HEIGHT; y++){
+                if(isUnknown(x,y)){
+                    switch (other.checkTile(x,y)){
+                        case Free -> setFree(x, y);
+                        case Wall -> setWall(x, y);
+                    }
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Get the list of frontiers without updating it
+     */
+    public List<Frontier> getOldFrontiers(){
+        return frontiers;
+    }
+    /**
+     * Update the list of frontiers and return it
+     */
+    public List<Frontier> findFrontiers(){
+        frontiers = frontierDetector.findFrontiers(this);
+        return frontiers;
+    }
+
+
+
 
     @Override
     public String toString() {
@@ -294,18 +354,5 @@ public class OccupancyGrid{
         }
         output.append(" ");
         return output.toString();
-    }
-
-    public void merge(OccupancyGrid other){
-        for(int x = 0; x < Constants.MAP_WIDTH; x++){
-            for(int y = 0; y < Constants.MAP_HEIGHT; y++){
-                if(isUnknown(x,y)){
-                    switch (other.checkTile(x,y)){
-                        case Free -> setFree(x, y);
-                        case Wall -> setWall(x, y);
-                    }
-                }
-            }
-        }
     }
 }
