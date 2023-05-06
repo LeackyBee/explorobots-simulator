@@ -21,7 +21,7 @@ public final class Constants {
 
     // Directories
     public static String MAP_DIRECTORY = "src/main/resources/maps/";
-    public static String CANVAS_DIRECTORY = "src/main/resources/META-INF/resources/images/";
+    public static String CANVAS_DIRECTORY = "src/main/resources/META-INF/resources/images/canvas/";
 
     // Debug constants
     public static boolean VISION_DEBUG = false;
