@@ -21,5 +21,5 @@ error-screenshots/
 webpack.generated.js
 
 /src/main/resources/META-INF/resources/images/canvas/canvas*.png
-!/src/main/resources/META-INF/resources/images/canvas/canvas.png
+!/src/main/resources/META-INF/resources/images/canvas/canvas0.png
 
