@@ -19,7 +19,6 @@ public class SimulationCycle {
 
     RealMap map;
     Agent[] agents;
-    UI ui;
 
     int timestep = 0;
 
@@ -72,11 +71,8 @@ public class SimulationCycle {
         Graphics2D g2d = image.createGraphics();
 
         // Draw a rectangle on the image
-        if(timestep <= 5){
-            g2d.setColor(Color.LIGHT_GRAY);
-        } else{
-            g2d.setColor(Color.cyan);
-        }
+
+        g2d.setColor(Color.LIGHT_GRAY);
         g2d.fillRect(0,0,Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
 
 
@@ -100,7 +96,7 @@ public class SimulationCycle {
 
 
             if(Constants.DRAW_FRONTIERS){
-                List<Frontier> frontiers = occ.findFrontiers();
+                List<Frontier> frontiers = occ.findFrontiers(new Point(a.getX(),a.getY()));
                 g2d.setColor(Color.GREEN);
                 for (Frontier f : frontiers){
                     for(Point p : f.getPoints()){
@@ -113,7 +109,7 @@ public class SimulationCycle {
 
         g2d.setColor(Color.RED);
         for(Agent a : agents){
-            g2d.fillRect(a.getX()-1, a.getY()-1, 3,3);
+            g2d.fillRect(a.getX()-1, a.getY()-1, 2,2);
         }
 
         // Dispose the Graphics2D object to free up resources

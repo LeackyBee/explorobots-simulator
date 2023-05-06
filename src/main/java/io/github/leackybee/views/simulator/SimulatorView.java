@@ -22,7 +22,7 @@ import io.github.leackybee.views.MainLayout;
 public class SimulatorView extends VerticalLayout {
 
     private FeederThread thread;
-    Image canvas = new Image("images/canvas.png", "");
+    Image canvas = new Image("images/canvas0.png", "");
 
     @Override
     protected void onAttach(AttachEvent attachEvent) {
@@ -45,11 +45,6 @@ public class SimulatorView extends VerticalLayout {
         canvas.setWidth("1000px");
         add(canvas);
 
-        /**H2 header = new H2("This place intentionally left empty");
-        header.addClassNames(Margin.Top.XLARGE, Margin.Bottom.MEDIUM);
-        add(header);
-        add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
-        **/
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
@@ -73,7 +68,7 @@ public class SimulatorView extends VerticalLayout {
         @Override
         public void run() {
             // Update the data for a while
-            while(count < 100){
+            while(true){
                 simulator.start(1);
                 ui.access(()->{
                     view.canvas.setSrc("images/canvas" + simulator.getTimestep() + ".png");

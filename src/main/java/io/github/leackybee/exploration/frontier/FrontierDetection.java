@@ -1,6 +1,7 @@
 package io.github.leackybee.exploration.frontier;
 
 import io.github.leackybee.mapping.OccupancyGrid;
+import io.github.leackybee.mapping.Point;
 
 import java.util.List;
 
@@ -9,5 +10,5 @@ import java.util.List;
 // Stretch all
 public interface FrontierDetection {
 
-    List<Frontier> findFrontiers(OccupancyGrid map);
+    List<Frontier> findFrontiers(Point o, OccupancyGrid map);
 }
