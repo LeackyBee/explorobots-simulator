@@ -15,6 +15,14 @@ public final class Constants {
         FFD,
     }
 
+    public enum EXPLORATION_TYPE{
+        FrontierBased,
+        RoleBased,
+        LeaderFollower,
+        Hungarian,
+
+    }
+
     // Defaults, these get replaced when we initialise the map
     public static int MAP_WIDTH;
     public static int MAP_HEIGHT;
@@ -33,9 +41,11 @@ public final class Constants {
     public static String MAP = "leaves.png";
 
     // Algorithm Choices
-    public static FRONTIER_DETECTION FRONTIER_DETECTION_ALGORITHM = FRONTIER_DETECTION.NAIVE;
+    public static FRONTIER_DETECTION FRONTIER_DETECTION_ALGORITHM = FRONTIER_DETECTION.WFD;
     public static VISION AGENT_VISION_TYPE = VISION.SHADOW;
     public static boolean THICK_LINES = true;
+
+    public static EXPLORATION_TYPE EXPLORATION_ALGORITHM = EXPLORATION_TYPE.FrontierBased;
 
 
 
