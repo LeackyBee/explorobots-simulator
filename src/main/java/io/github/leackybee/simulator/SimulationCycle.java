@@ -2,17 +2,18 @@ package io.github.leackybee.simulator;
 
 import com.vaadin.flow.component.UI;
 import io.github.leackybee.agents.Agent;
+import io.github.leackybee.exploration.frontier.Frontier;
 import io.github.leackybee.mapping.OccupancyGrid;
+import io.github.leackybee.mapping.Point;
 import io.github.leackybee.mapping.RealMap;
-import io.github.leackybee.views.simulator.SimulatorView;
-import org.apache.tomcat.util.bcel.Const;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class SimulationCycle {
 
@@ -31,8 +32,8 @@ public class SimulationCycle {
     public void start(int cycles){
         for(int i = 0; i < cycles; i++){
             timestep++;
-            updateCanvas();
             vision();
+            updateCanvas();
             communicate();
             moveAgents();
         }
@@ -96,6 +97,18 @@ public class SimulationCycle {
                     }
                 }
             }
+
+
+            if(Constants.DRAW_FRONTIERS){
+                List<Frontier> frontiers = occ.findFrontiers();
+                g2d.setColor(Color.GREEN);
+                for (Frontier f : frontiers){
+                    for(Point p : f.getPoints()){
+                        g2d.fillRect(p.x,p.y,1,1);
+                    }
+                }
+            }
+
         }
 
         g2d.setColor(Color.RED);

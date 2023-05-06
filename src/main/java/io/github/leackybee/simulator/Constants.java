@@ -26,6 +26,7 @@ public final class Constants {
     // Debug constants
     public static boolean VISION_DEBUG = false;
     public static boolean PATH_DEBUG = false;
+    public static boolean DRAW_FRONTIERS = false;
 
     // Simulation Configuration
     public static int NUM_AGENTS = 1;
