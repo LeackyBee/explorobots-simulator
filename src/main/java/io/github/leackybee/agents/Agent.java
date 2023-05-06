@@ -4,6 +4,8 @@ import io.github.leackybee.agents.vision.InverseRayCast;
 import io.github.leackybee.agents.vision.RayCast;
 import io.github.leackybee.agents.vision.ShadowCast;
 import io.github.leackybee.agents.vision.VisionHandler;
+import io.github.leackybee.exploration.FrontierBasedExploration;
+import io.github.leackybee.exploration.frontier.Controller;
 import io.github.leackybee.simulator.Constants;
 import io.github.leackybee.mapping.OccupancyGrid;
 import io.github.leackybee.mapping.Path;
@@ -19,6 +21,7 @@ public class Agent {
     private final OccupancyGrid occGrid;
     private final VisionHandler vision;
     private final int commRange;
+    private final Controller controller;
 
     public Agent(int x, int y, double heading, int visualRange, double fov, int commRange){
         this.x = x;
@@ -32,6 +35,12 @@ public class Agent {
             case SHADOW -> vision = new ShadowCast(visualRange, fov);
             case INVERSE_RAY -> vision = new InverseRayCast(visualRange,fov);
             default -> throw new RuntimeException("Invalid Vision Handler : " + Constants.AGENT_VISION_TYPE);
+        }
+
+        switch (Constants.EXPLORATION_ALGORITHM){
+            case FrontierBased -> controller = new FrontierBasedExploration(this);
+            default -> throw new RuntimeException("Invalid Exploration Algorithm : " + Constants.EXPLORATION_ALGORITHM);
+
         }
     }
 
@@ -55,10 +64,7 @@ public class Agent {
     public int getCommRange(){return this.commRange;}
 
     public void takeNextStep(){
-        move(x+20, y);
-        if(path != null) {
-            move(path.getNextPoint());
-        }
+        move(controller.nextPosition());
     }
 
     public void move(Point p){
