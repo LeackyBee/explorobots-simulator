@@ -120,10 +120,8 @@ public class OccupancyGrid{
         List<Point> output = new ArrayList<>();
         for(int x = c.x - radius; x <= c.x + radius; x++){
             for(int y = c.y - radius; y <= c.y + radius; y++){
-                if((x != c.x && y != c.y) && Math.hypot(c.y-y, c.x-x) <= radius){
-                    if(!isWall(x,y) || !isInBounds(x,y) || !isUnknown(x,y)){
-                        output.add(new Point(x,y));
-                    }
+                if(!(x == c.x && y == c.y) && isFree(x,y)){
+                    output.add(new Point(x,y));
                 }
             }
         }
