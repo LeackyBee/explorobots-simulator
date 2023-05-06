@@ -22,6 +22,10 @@ public class Frontier {
         return points;
     }
 
+    public int getPerimeter(){
+        return points.size();
+    }
+
     public String toString(){
         return "Frontier at (" +
                 center.x +
