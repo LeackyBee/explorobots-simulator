@@ -49,6 +49,9 @@ public class Agent {
     public int getY(){
         return this.y;
     }
+    public Point getPosition(){
+        return new Point(x,y);
+    }
     public int getCommRange(){return this.commRange;}
 
     public void takeNextStep(){
