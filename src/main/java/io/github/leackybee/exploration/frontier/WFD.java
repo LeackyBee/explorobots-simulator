@@ -19,7 +19,6 @@ public class WFD implements FrontierDetection{
         while(!open.isEmpty()){
             Point p = open.remove(0);
             if (!closed.contains(p) && map.checkTile(p) == OccupancyGrid.occTileState.Free) {
-                System.out.println("Looking at point " + p);
                 boolean candidate = false;
 
                 // If one of p's neighbours are unknown, it is a frontier node
